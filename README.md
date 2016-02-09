@@ -1,1 +1,1 @@
-# Translater
+# Translater, is a simple language translater app (ASP.NET MVC - MSSQL - JQUERY - YANDEX API )
