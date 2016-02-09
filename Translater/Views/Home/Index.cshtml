@@ -1,0 +1,127 @@
+﻿@model Translater.Models.IndexModel
+
+<br />
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="col-md-6">
+            <table class="table-responsive">
+
+                <tr>
+                    <td>@Html.Label("Kaynak")</td>
+                    <td>@Html.DropDownList("ddlSource", @Model.LanguageList, new { Class = "form-control" })</td>
+                    <td>@Html.Label("Hedef")</td>
+                    <td>@Html.DropDownList("ddlDestination", @Model.LanguageList, new { Class = "form-control" })</td>
+                </tr>
+                <tr>
+                    <td>@Html.Label("Kaynak")</td>
+                    <td>@Html.TextBox("txtSource", "", new { Class = "input-lg form-control" })</td>
+                    <td>@Html.Label("Sonuç")</td>
+                    <td>@Html.TextBox("txtResult", "", new { Class = "input-lg form-control" })</td>
+                </tr>
+
+            </table>
+        </div>
+        
+        <div class="col-md-4">
+            <button class="btn btn-lg btn-success" type="button" onclick="Translate()">Çevir</button>
+        </div>
+         
+         
+    </div>
+</div>
+<br /><br />
+<div class="row">
+    <div class="col-md-12">
+        <h4>Yakın zamanda aradığınız kelimeler</h4>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Kelime</th>
+                    <th>Aranma Sayısı</th>
+                </tr>
+            </thead>
+            <tbody id="lastRecords"></tbody>
+        </table>
+
+    </div>
+</div>
+
+
+
+@section scripts{
+    <script type="text/javascript"> 
+    
+        GetLastRecord();
+
+        function Translate() {
+            var txtLangSource = $('#ddlSource option:selected').val();
+            var txtLangDestination = $('#ddlDestination option:selected').val();
+            var txtSource = $('#txtSource').val();
+
+            getRequest({
+                url: '/Home/Translate/',
+                data: { LanguageSource: txtLangSource, LanguageDestinaton: txtLangDestination, Source: txtSource },
+                callback: function (responseData) {
+                    if (responseData.IsSuccess) {
+                        $('#txtResult').val(responseData.Destination);
+                        GetLastRecord();
+                    } else {
+                        alert(responseData.ErrorText);
+                    }
+                }
+            });
+
+        }
+
+        function GetLastRecord() {
+
+            $('#lastRecords >').remove();
+
+            getRequest({
+                url: '/Home/GetLastRecord/',
+                data: {},
+                callback: function (responseData) {
+                    $.each(responseData, function (index, value) {
+                        var tmpData = '<tr><td>' + value.Keyword+ '</td><td>'+value.Count+'</td></tr>';
+                        $('#lastRecords').append(tmpData);
+                    });
+                }
+            });
+        }
+
+
+
+
+        function getRequest(config) {
+            request('GET', config);
+        }
+
+        function postRequest(config) {
+            request('POST', config);
+        }
+
+        function putRequest(config) {
+            request('put', config);
+        }
+
+        function request(method, config) {
+            $.ajax({
+                url: config.url,
+                type: method,
+                dataType: 'json',
+                data: config.data,
+                success: function (result) {
+                    if (config.callback) {
+                        config.callback(result);
+                    }
+                },
+                error: function () {
+                    console.log('somethings wrong!')
+                }
+            });
+        }
+
+    </script>
+}
