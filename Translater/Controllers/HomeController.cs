@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿#region Using
+
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,17 +9,18 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Translater.Models;
 
+#endregion Using
+
 namespace Translater.Controllers
 {
     public class HomeController : Controller
     {
-
         #region Variable
 
         private ModelContext modelContext = new ModelContext();
         private string uri = "https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20150122T203315Z.bf114d5768d7abcc.2e8030df70953e98448b2b87e2159bc9a4ca7be2&lang={0}-{1}&text={2}";
 
-        #endregion
+        #endregion Variable
 
         #region Public Methods
 
