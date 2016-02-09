@@ -32,7 +32,7 @@
 </div>
 <br /><br />
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6">
         <h4>Yakın zamanda aradığınız kelimeler</h4>
 
         <table class="table table-striped">
@@ -46,6 +46,21 @@
         </table>
 
     </div>
+
+    <div class="col-md-6">
+        <h4>En çok aradığınız kelimeler</h4>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Kelime</th>
+                    <th>Aranma Sayısı</th>
+                </tr>
+            </thead>
+            <tbody id="topRecords"></tbody>
+        </table>
+
+    </div>
 </div>
 
 
@@ -54,6 +69,7 @@
     <script type="text/javascript"> 
     
         GetLastRecord();
+        GetTopRecord();
 
         function Translate() {
             var txtLangSource = $('#ddlSource option:selected').val();
@@ -67,6 +83,7 @@
                     if (responseData.IsSuccess) {
                         $('#txtResult').val(responseData.Destination);
                         GetLastRecord();
+                        GetTopRecord();
                     } else {
                         alert(responseData.ErrorText);
                     }
@@ -80,12 +97,28 @@
             $('#lastRecords >').remove();
 
             getRequest({
-                url: '/Home/GetLastRecord/',
+                url: '/Home/GetLastRecords/',
                 data: {},
                 callback: function (responseData) {
                     $.each(responseData, function (index, value) {
                         var tmpData = '<tr><td>' + value.Keyword+ '</td><td>'+value.Count+'</td></tr>';
                         $('#lastRecords').append(tmpData);
+                    });
+                }
+            });
+        }
+
+        function GetTopRecord() {
+
+            $('#topRecords >').remove();
+
+            getRequest({
+                url: '/Home/GetTopRecords/',
+                data: {},
+                callback: function (responseData) {
+                    $.each(responseData, function (index, value) {
+                        var tmpData = '<tr><td>' + value.Keyword + '</td><td>' + value.Count + '</td></tr>';
+                        $('#topRecords').append(tmpData);
                     });
                 }
             });

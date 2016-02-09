@@ -56,9 +56,16 @@ namespace Translater.Controllers
             return Json(translateModel, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetLastRecord()
+        public JsonResult GetLastRecords()
         {
             List<SearchHistory> searhList = modelContext.SearchHistory.OrderByDescending(z => z.ID).Take(10).ToList();
+
+            return Json(searhList, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetTopRecords()
+        {
+            List<SearchHistory> searhList = modelContext.SearchHistory.OrderByDescending(z => z.Count).Take(10).ToList();
 
             return Json(searhList, JsonRequestBehavior.AllowGet);
         }
