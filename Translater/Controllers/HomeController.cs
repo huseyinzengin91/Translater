@@ -3,6 +3,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -18,11 +19,20 @@ namespace Translater.Controllers
         #region Variable
 
         private ModelContext modelContext = new ModelContext();
-        private string uri = "https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20150122T203315Z.bf114d5768d7abcc.2e8030df70953e98448b2b87e2159bc9a4ca7be2&lang={0}-{1}&text={2}";
+        private string apiUrl = string.Empty;
 
         #endregion Variable
 
         #region Public Methods
+
+        #region Constructor
+
+        public HomeController()
+        {
+            apiUrl = string.Join("", ConfigurationManager.AppSettings.Get("YandexUrl"), ConfigurationManager.AppSettings.Get("YandexKey"), "&lang={0}-{1}&text={2}");
+        }
+
+        #endregion Constructor
 
         public ActionResult Index()
         {
@@ -36,9 +46,9 @@ namespace Translater.Controllers
         {
             HttpClient client = new HttpClient();
 
-            uri = string.Format(uri, translateModel.LanguageSource, translateModel.LanguageDestinaton, translateModel.Source);
+            apiUrl = string.Format(apiUrl, translateModel.LanguageSource, translateModel.LanguageDestinaton, translateModel.Source);
 
-            string translateResponse = await client.GetStringAsync(uri);
+            string translateResponse = await client.GetStringAsync(apiUrl);
 
             ResponseModel responseModel = JsonConvert.DeserializeObject<ResponseModel>(translateResponse);
 
