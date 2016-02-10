@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿#region Using
+
+using System.Collections.Generic;
 using System.Web.Mvc;
+
+#endregion Using
 
 namespace Translater.Models
 {

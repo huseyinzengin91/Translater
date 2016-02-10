@@ -23,8 +23,6 @@ namespace Translater.Controllers
 
         #endregion Variable
 
-        #region Public Methods
-
         #region Constructor
 
         public HomeController()
@@ -33,6 +31,8 @@ namespace Translater.Controllers
         }
 
         #endregion Constructor
+
+        #region Public Methods
 
         public ActionResult Index()
         {
